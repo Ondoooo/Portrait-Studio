@@ -4,7 +4,7 @@ A user renders a chart in Stable, tries Experimental, then returns to Stable. Ea
 
 ## Run the experiment
 
-From this folder, run the following commands with Python 3.10 or later. The script generates two 2×2 RGB charts and all delivered PPM files in a temporary directory. It uses only the standard library and removes the directory on exit.
+From this folder, run the following commands with Python 3.9 or later. On macOS, use `python3` or activate a virtual environment. The script generates two 2×2 RGB charts and all delivered PPM files in a temporary directory. It uses only the standard library and removes the directory on exit.
 
 ```sh
 python isolation_demo.py

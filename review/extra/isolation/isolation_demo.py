@@ -1,5 +1,7 @@
 """A tiny two-mode renderer with intentionally weak cache keys and a reference key."""
 
+from __future__ import annotations
+
 import argparse
 import hashlib
 import tempfile
