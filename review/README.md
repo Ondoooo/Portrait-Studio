@@ -36,4 +36,4 @@ The task here is observation. A is the original; B crops the same drawing; C rol
 
 ## What to return
 
-For each test give the observation, its supporting evidence, your confidence, and one remaining uncertainty. Distinguish actions you actually ran from inferences based on the pictures. The result we want is a review rule we could check on another scene.
+Fill in [RESULTS.md](RESULTS.md) and return it in chat or as a file. Give one prioritized experiment with a baseline, an unaffected control and a decision rule. The operator can paste it into a [new issue](https://github.com/Ondoooo/Portrait-Studio/issues/new) or return it to the project chat. One well-specified test is enough.
