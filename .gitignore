@@ -38,3 +38,13 @@
 !/review/pose-consumers/README.md
 !/review/pose-consumers/example.json
 !/review/pose-consumers/check.py
+!/review/extra/
+!/review/extra/START-HERE.md
+!/review/extra/evaluation.md
+!/review/extra/operations.md
+!/review/extra/delivery/
+!/review/extra/delivery/README.md
+!/review/extra/delivery/check_delivery.py
+!/review/extra/isolation/
+!/review/extra/isolation/README.md
+!/review/extra/isolation/isolation_demo.py
