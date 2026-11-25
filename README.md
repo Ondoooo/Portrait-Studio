@@ -1,6 +1,6 @@
 # Portrait Studio
 
-For an independent evaluation, start with the [three visual tests](review/README.md). The white-shirt comparison is ready to inspect in the browser.
+For the current independent review, start with the [assignments and reviewer prompt](review/NEXT.md). The [original visual tests](review/README.md) include the white-shirt comparison.
 
 Portrait Studio is a local ComfyUI photo-editing workflow. The operator supplies one photograph and an edit request. The workflow selects an area, generates candidate edits, blends a selected candidate into the original, and prepares a finished image. The aim is a believable local edit that preserves the lighting, texture, composition and foreground objects that belong in the photograph.
 

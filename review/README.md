@@ -1,5 +1,7 @@
 # Three independent visual tests
 
+The [round-two assignments and reviewer prompt](NEXT.md) cover raised outlines, blending, regional pose observations, downstream architecture, and independent engineering checks.
+
 Start with the shirt comparison. It takes about 15 minutes and needs only the image below. The other two tests are independent. Each has a concrete stopping point. All fixtures are original synthetic examples. They exercise review methods without requiring the local application, photos, model weights or another GPU run.
 
 ## 1. Which repair restores the white shirt?

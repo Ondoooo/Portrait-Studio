@@ -1,0 +1,39 @@
+# Four independent CPU review tasks
+
+Each brief can be copied into a separate issue. All inputs can be generated from the text. A laptop, Python's standard library, and optionally Pillow are enough. Each task returns a small reproducer and a decision that another reviewer can check.
+
+## 1. Can an interrupted export safely reuse a completed file?
+
+An image exporter can stop after publishing a file but before recording completion. Build a small restart test in a temporary directory. Can a retry produce exactly one verified result for the original request, even when another request uses the same display name?
+
+- **Fixture.** Make a 17 × 11 RGB image assigning color `(x, y, 0)` to each pixel at `(x, y)`. Use a five-pixel horizontal editable stripe at y = 5, x = 3 through 7. The edit sets those pixels' blue channel to the seed modulo 256. Use seed 7 and label the result `sample`. Make a competing request with seed 8 and the same label, plus one with seed 7 and a stripe shifted one pixel right. Record the input, effective operation and version, seed, mask, and decoded result dimensions and RGB digest. A binary PPM file works.
+- **Test.** Interrupt the exporter at each of three boundaries, after writing a partial temporary file, after publishing the image, and after writing its completion record. Restart twice. In separate trials leave a truncated export, swap the record with the competing request's record, and swap in its valid, same-size image. A clean uninterrupted export of each request supplies the oracle.
+- **Return.** Provide a runnable test, the exact resume/replace/recompute rule, and a table listing fault, request, number of published results, and matched oracle. Explain how the rule distinguishes an incomplete save from a verified cache hit.
+- **Decision.** Advance the rule to an integration test if every retry converges to exactly one correct published result per request and unrelated valid exports survive. Any stale hit, duplicate final, or displaced competing result blocks adoption. This harness establishes behavior only for the storage and failure boundaries exercised.
+
+## 2. Will the coordinate check catch a one-pixel error after rotation, crop and resize?
+
+Build an independent test for a crop-to-source coordinate mapper. Can it distinguish a wrong transform from harmless rounding on an odd-sized image?
+
+- **Fixture.** On a 37 × 23 source, place distinct labeled witnesses at pixel indices (5,4), (11,15), (25,7), and (30,19). Use the half-open crop [4,32) × [3,21). Exercise identity, horizontal reflection inside the crop, and clockwise 90° rotation inside the crop. Use native oriented size in the first run and resize the oriented result to 19 × 13 in the second. Compare continuous point coordinates before raster rounding. Source pixel (x,y) has center (x+0.5,y+0.5) in edge coordinates.
+- **Oracle and controls.** Subtract the crop origin. For an input crop of width W and height H use (W−u,v) for reflection and (H−v,u) for clockwise rotation, swapping the output dimensions for rotation. Multiply by target width/oriented width and target height/oriented height. Write the oracle independently from the mapper. Plant a one-source-pixel horizontal, vertical and diagonal translation in the return map. Also swap x/y scale factors on a nonuniform resize and exchange two witness IDs. Retain correctly mapped cases as negative controls.
+- **Return.** Provide the executable test, the expected and recovered source centers for each witness, and a per-case pass/fail table. Mark any view in which a planted fault has no mathematical effect. If visualizing these points, report raster rounding separately.
+- **Decision.** Advance if unchanged mappings agree within 0.01 source pixel per axis and every effective planted fault fails on at least one named witness. A clean round trip through two inverses from the same implementation supplies insufficient evidence.
+
+## 3. Can a blind review ballot be traced to the exact delivery shown?
+
+Build a toy review packet for an illustrated transit card. The requested edit changes the blue square to green and preserves the small black serial mark. The reference shows the original card. Can a verifier identify a stale crop or a ballot attached to the wrong board before results count?
+
+- **Fixture.** Generate a 128 × 80 cream card, a blue 20 × 20 square starting at (16,16), and a black 2 × 4 mark starting at (88,38). Generate three same-size candidates: unchanged baseline, successful recolor, and recolor with the mark erased only at final export. The pre-export preview of the third candidate still contains the mark. Use the decoded final raster for the overview and a native crop [80,100) × [32,48). Shuffle the anonymous labels differently on two boards.
+- **Test.** Create a reviewer-facing instruction, full views, crops and ballot. Keep the identity map and numerical results private until a ballot is recorded. Bind the ballot to the specific board revision and each displayed view to its candidate, delivery, crop bounds and rendering recipe. A reviewer can tie candidates, reject them all, and record a different preference at each scale. For the clean control, confirm each crop against a fresh extraction. Then reuse a ballot from the other shuffle, substitute the third candidate's preview crop, and exchange two distinct overview images under their original labels.
+- **Return.** Provide the two boards, one example ballot, and a small reproducible checker with the four observed outcomes. List which consistency checks run before reveal. Include the request, protected mark, reference role and stage on each board so an independent reader knows what to judge.
+- **Decision.** Use the packet format for a pilot when the valid packet passes, every substitution is caught, and the reviewer-facing material reveals no identities or scores. Any unresolved attachment blocks use of that ballot. The synthetic card tests provenance and ballot usability. Human preferences can still differ.
+
+## 4. What can sparse memory telemetry establish about a stage's peak?
+
+Write a CPU-only analyzer for synthetic Windows-style counters. It should tell an operator when measured system commit headroom fell below a budget and when the evidence is insufficient to establish a safe minimum during an entire stage.
+
+- **Fixture.** Use independent traces sampled at times 0, 4 and 8 seconds. Each pair below is (committed GiB, commit-limit GiB). Trace A has (20,40), (27,40), (22,40). Trace B gives the logger exactly the same samples but a fixture oracle inserts (38,40) at t=2, which the logger misses. Trace C has (20,40), (27,48), (22,48). Trace D has (20,40), (35,40), (22,40). Use a stage interval [0,8] and a headroom budget of 6 GiB. Treat these as system-wide counters, with no process attribution. Run an additional D control with the t=4 sample missing.
+- **Test.** Compute headroom from the paired limit and committed bytes at each timestamp. Report the largest observed commit, smallest observed headroom and longest interval between samples. Keep the hidden oracle separate until evaluating results. Compare what can be asserted for A versus B and for D versus D with the missing sample.
+- **Return.** Provide the analyzer, traces, and a five-row table showing measured extrema, coverage and whether a breach is observed or remains possible. Explain what additional measurement would justify a stronger claim about the entire interval.
+- **Decision.** Use the report for sampled headroom if A/B give identical measured results, C gives 20 GiB minimum sampled headroom, D reports its 5 GiB observed breach, and the gapped D does not claim continuous safety. If the analyzer treats RAM availability as commit or a sampled peak as an upper bound on true usage, revise it before operational use.

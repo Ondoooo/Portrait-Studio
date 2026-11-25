@@ -1,0 +1,18 @@
+{
+  "task": "Recolor the visible front chest badge on a fully clothed display mannequin.",
+  "rows": ["00000000","00011000","00222200","00233200","00222200","00044000","00044000","00000000"],
+  "palette": [[220,225,224],[145,150,155],[45,77,105],[226,179,67],[59,61,73],[49,150,101]],
+  "badge_value": 3,
+  "recolor_value": 5,
+  "legacy": {
+    "original_size": [8,8], "posture": "upright", "view": "front",
+    "quarter_turns": 0, "delivery_quarter_turns": 0, "subject_box": [2,1,6,7]
+  },
+  "observation_v2": {
+    "frame": "original", "producer": "hand-authored mannequin fixture",
+    "upper_torso": {"facing":"front","extent":"full","visibility":"clear","evidence":"visible front badge"},
+    "pelvis": {"facing":"unknown","extent":"full","visibility":"partial","evidence":"long jacket covers belt"}
+  },
+  "regional_mode": "Auto",
+  "delivery_crop_xyxy": [1,1,7,7]
+}
